@@ -111,7 +111,7 @@ class PhotoMosaic
   }
   
   //Return the average color of the image.
-  color average(PImage img)
+  private color average(PImage img)
   {
     //Trimming factors, ignoring the marginal effect.
     int barX = (int)(img.width*0.1);
@@ -134,7 +134,7 @@ class PhotoMosaic
   }
   
   //Return the average color of the given region in the given image in terms of a float array with three elements indicating red, green, blue correspondingly.
-  float[] average(int xIni, int yIni, int xFin, int yFin, PImage img)
+  private float[] average(int xIni, int yIni, int xFin, int yFin, PImage img)
   {
     float red=0, green=0, blue=0;
     for (int i=xIni; i<=xFin; i++)
@@ -154,7 +154,7 @@ class PhotoMosaic
   }
   
   //Scale the given image by prox horizontally and proy vertically. x and y are the initial coordinate of the picture.
-  void scale(float prox, float proy, int x, int y, PImage image)
+  private void scale(float prox, float proy, int x, int y, PImage image)
   {
     int sizeX = (int)(image.width*prox);
     int sizeY = (int)(image.height*proy);
@@ -171,7 +171,7 @@ class PhotoMosaic
   }
   
   //Returne the index of the element with the least float value in the float array.
-  int minimum(float[] input)
+  private int minimum(float[] input)
   {
     float min = input[0];
     int index = 0;
