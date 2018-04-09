@@ -8,10 +8,8 @@ import java.util.ArrayList;
  * A template for the home screen in which the different events are displayed.
  * A HomeScreen object contains all the relevant information pertaining to the 
  * elements of the home screen as well as the utilities supproted by it. These
- * utilities, nonetheless, has to be invoked explicitly. A naming rule must be 
- * followed: each front image must end in a 'f', whereas each back image must 
- * end in a 'b'. The frond and back images of one item must share the same name
- * despite their ending character, 'f' or 'e'. 
+ * utilities, nonetheless, has to be invoked explicitly. 
+ * The front and back images of one item must share the same name. 
  */
 public class HomeScreen
 {
