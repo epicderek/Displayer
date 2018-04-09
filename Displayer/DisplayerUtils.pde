@@ -27,7 +27,7 @@
     return ims;
   }
   
-  //Fetch all images contained in this directory and record their names despite the last character in a map. 
+  //Fetch all images contained in this directory and record their names. 
   public Map<String,PImage> loadImagesMap(String path)
   {
     Map<String,PImage> write = new HashMap<String,PImage>();
@@ -37,7 +37,7 @@
       String name = files[i].getName();
       PImage img = loadImage(String.format("%s%s%s",path,"\\",name));
       String formattedName = name.substring(0,name.indexOf("."));
-      write.put(formattedName.substring(0,formattedName.length()-1),img);
+      write.put(formattedName,img);
     }
     return write;
   }
