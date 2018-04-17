@@ -21,12 +21,22 @@ public class PhotoMosaic
   //The factor that the total area would be divided to obtain the area of each piece of the mosaic.
   private int divisionFactor;
   //The sidelength of each fragmented square.
-  private float size;
+  private int size; 
+  //The x coordinate of the top left corner. 
+  private int startX;
+  //The y coordinate of the top left corner. 
+  private int startY;
+  //The width of the mosaic. 
+  private int width;
+  //The height of the mosaic. 
+  private int height; 
   
   /**
    * Create a photomosaic given the paths to both the target picture and the pictures
    * that serves as tiles and the division factor which indicates the number of tiles
-   * this mosaic is to be rendered by. 
+   * this mosaic is to be rendered by. The dimensions of the mosaic is assumed to be 
+   * the size of the image. And the top left corner of the mosaicis supposed to be 
+   * the top left corner of the screen. 
    * @param divisionFactor The number of tiles this mosaic to be tiled with. 
    * @param pathTar The path of the target picture. 
    * @param pathEle The path of the element pictures. 
@@ -39,6 +49,36 @@ public class PhotoMosaic
     loadImg();
     //Calculate the side length of each square by the division factor.
     size = (int)sqrt(tar.width*tar.height/this.divisionFactor); 
+    //Initialize the dimensions of the mosaic. 
+    width = tar.width;
+    height = tar.height;
+  }
+  
+  /**
+   * Create a photomosaic given the paths to both the target picture and the pictures
+   * that serves as tiles and the division factor which indicates the number of tiles
+   * this mosaic is to be rendered by. 
+   * @param divisionFactor The number of tiles this mosaic to be tiled with. 
+   * @param pathTar The path of the target picture. 
+   * @param pathEle The path of the element pictures. 
+   * @param startX The x coordinate of the top left corner of the mosaic. 
+   * @param startY The y coordinate of the top left corner of the mosaic. 
+   * @param sizeX The width of the mosaic. 
+   * @param sizeY The height of the mosaic. 
+   */
+  public PhotoMosaic(int divisionFactor, String pathTar, String pathEle, int startX, int startY, int sizeX, int sizeY)
+  {
+    this.divisionFactor = divisionFactor;
+    this.pathTar = pathTar;
+    this.pathEle = pathEle;
+    loadImg();
+    //Calculate the side length of each square by the division factor.
+    size = (int)sqrt(tar.width*tar.height/this.divisionFactor);
+    //Intialize the positions and dimensions of the mosaic. 
+    this.startX = startX;
+    this.startY = startY;
+    width = sizeX;
+    height = sizeY; 
   }
   
   /**
@@ -47,7 +87,7 @@ public class PhotoMosaic
   public void mosaic()
   {
     //Fragment the picture.
-    tile((int)size,tar);
+    tile(size,tar);
   }
   
   //Load the image properly into the target image and the array of images for the element pictures.
@@ -71,12 +111,15 @@ public class PhotoMosaic
   //Tile the picture by replacing each valid square region with a picture contained in the images array with the smallest error in average color.
   private void tile(int inc, PImage img)
   {
-    for (int i=0; i<img.width; i+=inc)
+    for (int i=startX; i<width; i+=inc)
     {
-      for (int j=0; j<img.height; j+=inc)
+      for (int j=startY; j<height; j+=inc)
       {
+        //Calculate the corresponding coordinate of the current position in the
+        //actual picture. 
+        int[] coor = {(int)((i-startX)*float(tar.width)/width),(int)((j-startY)*tar.height/height)};  
         //The average color of the region.
-        float[] ave = average(i,j,i+inc,j+inc,img);
+        float[] ave = average(coor[0],coor[1],coor[0]+(int)(inc*float(tar.width)/width),coor[1]+(int)(inc*float(tar.height)/height),img);
         //Record the errors for each picture as for this region.
         for(int c=0; c<images.length; c++)
         {
@@ -86,11 +129,8 @@ public class PhotoMosaic
         int index=minimum(error);
         //Fetch the correponding image.
         PImage min = images[index];
-        //The horizontal and vertical porportions that the picture would be required to scaled to provide a square image of the given size.
-        float xPor = size/min.width;
-        float yPor = size/min.height;
         //Scale the picture and place it at this position as its top left coordinates.
-        scale(xPor,yPor,i,j,min);
+        scale(size,size,i,j,min);
       }
     }
   }
